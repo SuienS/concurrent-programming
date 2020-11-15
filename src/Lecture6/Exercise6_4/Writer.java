@@ -14,18 +14,22 @@ public class Writer extends Thread {
 
     public void run(){
         System.out.println(getState());
-        for ( int i = 0 ; i < iterations ; i++ ){
-            int randInt1 = (int)( Math.random()*10000 );
-            sharedVariable1.assign(randInt1);
-            System.out.println( this.name + " assigned: X " + randInt1 ) ;
-            int randInt2 = (int)( Math.random()*10000 );
-            sharedVariable2.assign(randInt2);
-            System.out.println( this.name + " assigned: Y " + randInt2 ) ;
-            try {
-                //sleep( 2000 ) ;
-                sleep( (int)( Math.random()*10 ) );
+        synchronized ( sharedVariable1 )  // the "X" object acts as the LOCK
+        {
+            for ( int i = 0 ; i < iterations ; i++ ){
+                int randInt1 = (int)( Math.random()*10000 );
+                sharedVariable1.assign(randInt1);
+                System.out.println( this.name + " assigned: X " + randInt1 ) ;
+                int randInt2 = (int)( Math.random()*10000 );
+                sharedVariable2.assign(randInt2);
+                System.out.println( this.name + " assigned: Y " + randInt2 ) ;
+                try {
+                    //sleep( 2000 ) ;
+                    sleep( (int)( Math.random()*10 ) );
+                }
+                catch ( InterruptedException e ) {}
             }
-            catch ( InterruptedException e ) {}
         }
+
     }
 }

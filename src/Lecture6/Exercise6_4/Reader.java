@@ -15,14 +15,17 @@ public class Reader extends Thread{
     }
 
     public void run(){
-        for ( int i = 0 ; i < iterations ; i++ ){
-            System.out.println( this.name + " read X: " + sharedVariable1.value() ) ;
-            System.out.println( this.name + " read Y: " + sharedVariable2.value() ) ;
-            try {
-                sleep( (int)( Math.random()*1000 ) );
-                System.out.println(getState());
+        synchronized ( sharedVariable1 )  // the "X" object acts as the LOCK
+        {
+            for ( int i = 0 ; i < iterations ; i++ ){
+                System.out.println( this.name + " read X: " + sharedVariable1.value() ) ;
+                System.out.println( this.name + " read Y: " + sharedVariable2.value() ) ;
+                try {
+                    sleep( (int)( Math.random()*1000 ) );
+                    System.out.println(getState());
+                }
+                catch ( InterruptedException e ) {}
             }
-            catch ( InterruptedException e ) {}
         }
     }
 
